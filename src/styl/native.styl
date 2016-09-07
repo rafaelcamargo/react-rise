@@ -1,0 +1,56 @@
+@require '_variables'
+@require '_mixins'
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol
+  margin 0
+  padding 0
+  color $color-grey-dark
+  font-family $font-family-primary
+  font-weight 300
+
+body, h1, h2, h3, h4, h5, h6, p
+  line-height 1.2
+
+input
+  display inline
+  padding 16px 15px 15px
+  background-color $color-white
+  background-position right -20px
+  background-size 20px 10px
+  background-repeat no-repeat
+  font-family $font-family-primary
+  font-size 16px
+  border 1px solid $color-grey-semi-light
+  border-radius(8px)
+  box-sizing(border-box)
+  transition(all, 500ms)
+  &:hover,
+  &:focus,
+  &:active
+    border 1px solid $color-grey-dark
+    outline 0
+
+label
+  display: block;
+
+a
+  padding-bottom 2px
+  color $color-primary
+  text-decoration none
+  border-bottom 1px solid transparent
+  &:hover
+    border-bottom 1px solid $color-primary
+
+::-webkit-input-placeholder {
+  color: alpha($color-grey-dark, 0.75);
+}
+:-moz-placeholder {
+  color: alpha($color-grey-dark, 0.75);
+}
+::-moz-placeholder {
+  color: alpha($color-grey-dark, 0.75);
+}
+:-ms-input-placeholder {
+  color: alpha($color-grey-dark, 0.75);
+}
+
