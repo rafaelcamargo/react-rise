@@ -2,8 +2,7 @@ module.exports = function(grunt) {
 
   var src = {
     libs: {
-      path: 'node_modules/',
-      files: 'node_modules/**/*.min.js'
+      path: 'node_modules/'
     },
     scripts: {
       path: 'src/jsx/',
@@ -22,8 +21,8 @@ module.exports = function(grunt) {
         file: 'dist/css/libs/libs.min.css'
       },
       scripts: {
-        path: 'dist/js/libs/',
-        file: 'dist/js/libs/libs.min.js'
+        path: 'dist/js/libs/'
+        // file: 'dist/js/libs/libs.min.js'
       }
     },
     app: {
@@ -72,10 +71,11 @@ module.exports = function(grunt) {
     //         flatten: true,
     //         cwd: src.libs.path,
     //         src: [
-    //           'jquery/dist/jquery.min.js',
-    //           'jquery/dist/jquery.min.map'
+    //           'react/dist/react.min.js',
+    //           'react-dom/dist/react-dom.min.js',
+    //           'react-router/dist/ReactRouter.min.js'
     //         ],
-    //         dest: dist.libs.path
+    //         dest: dist.libs.scripts.path
     //       }
     //     ],
     //   }
@@ -98,11 +98,11 @@ module.exports = function(grunt) {
     },
 
     concat_in_order: {
-      dist : {
-        files : {
-          'dist/js/app.min.js' : dist.app.scripts.file
-        }
-      },
+      // dist : {
+      //   files : {
+      //     'dist/js/app.min.js': dist.app.scripts.path + '**/*.js'
+      //   }
+      // },
       libStyles : {
         files : {
           'dist/css/lib.min.css': [
@@ -110,28 +110,25 @@ module.exports = function(grunt) {
           ]
         }
       }
-      // libScripts: {
-      //   files : {
-      //     'dist/js/lib.min.js': [
-      //       src.libs.path + 'react/dist/react.min.js',
-      //       src.libs.path + 'react-dom/dist/react-dom.min.js'
-      //     ]
-      //   }
-      // }
     },
+
+    // browserify: {
+    //   dist: {
+    //     files: {
+    //       'dist/js/libs/libs.min.js': [
+    //         src.libs.path + 'react/dist/react.min.js',
+    //         src.libs.path + 'react-dom/dist/react-dom.min.js',
+    //         src.libs.path + 'react-router/umd/ReactRouter.min.js'
+    //       ]
+    //     }
+    //   }
+    // },
 
     browserify: {
       dist: {
         files: {
-          'dist/js/libs/libs.min.js': [
-            src.libs.path + 'react/dist/react.min.js',
-            src.libs.path + 'react-dom/dist/react-dom.min.js',
-            src.libs.path + 'react-router/umd/ReactRouter.min.js'
-          ]
+          'dist/js/app.min.js': dist.app.scripts.path + '**/*.js'
         }
-        // options: {
-        //   transform: ['coffeeify']
-        // }
       }
     },
 
@@ -144,7 +141,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: src.scripts.path,
-          src: '*.jsx',
+          src: ['**/*.jsx'],
           dest: dist.app.scripts.path,
           ext: '.js'
         }]
@@ -170,17 +167,19 @@ module.exports = function(grunt) {
       dist: {
         files: src.scripts.files,
         tasks: [
-          'jshint:dist',
-          'concat_in_order:dist'
+          //'jshint:dist',
+          //'concat_in_order:dist'
+          'babel',
+          'browserify'
         ]
       },
-      lib: {
-        files: src.libs.files,
-        tasks: [
-          'concat_in_order:libStyles',
-          'concat_in_order:libScripts'
-        ]
-      },
+      // lib: {
+      //   files: src.libs.files,
+      //   tasks: [
+      //     'concat_in_order:libStyles'
+      //     'concat_in_order:libScripts'
+      //   ]
+      // },
       conf: {
         files: config.files,
         tasks: ['jshint:conf']
@@ -215,10 +214,10 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'stylus',
     // 'copy',
-    'browserify',
     'babel',
+    'browserify',
     'concat_in_order',
-    'uglify:libScripts',
+    //'uglify:libScripts',
     // 'jshint'
     // 'karma'
   ]);
